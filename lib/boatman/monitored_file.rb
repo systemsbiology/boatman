@@ -1,7 +1,8 @@
-class MonitoredFile < File
+class MonitoredFile
+  attr_accessor :path
 
   def initialize(file_path)
-    super(file_path)
+    @path = file_path
   end
 
   def disable_checksum_verification
