@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+puts "Starting boatman"
+
+$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
+
+require 'rubygems'
+require 'ruby-debug'
+require 'boatman'
+
+Boatman.load(ARGV)
+Boatman.run
