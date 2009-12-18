@@ -15,11 +15,7 @@ class MonitoredFile < File
       source_path = file.path
       base_name = File.basename(source_path)
 
-      if(destination =~ /^\//)
-        destination_path = File.expand_path(destination + "/" + base_name)
-      else
-        destination_path = File.expand_path(working_directory + "/" + destination + "/" + base_name)
-      end
+      destination_path = File.expand_path(destination + "/" + base_name)
 
       next if File.exists?(destination_path)
 

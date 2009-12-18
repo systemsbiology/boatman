@@ -1,3 +1,4 @@
+$DEBUG = true
 require "yaml"
 require "digest/md5"
 
@@ -17,22 +18,17 @@ class Boatman
       exit(0)
     end
 
-    working_directory = @directory = args[1] || "."
+    @config_file = args[0]
 
-    Object.class_eval do
-      define_method("working_directory") do
-        return working_directory
-      end
-    end
-
-    puts "working directory: #{@directory}" if $DEBUG
+    @working_directory = args[1] || "."
+    puts "working directory: #{@working_directory}" if $DEBUG
 
     load_config_file(args[0])
   end
 
   def self.load_config_file(file)
-    puts "loading config.yml from #{@directory}" if $DEBUG
-    config = YAML.load_file(@directory + "/config.yml")
+    puts "loading #{@config_file}" if $DEBUG
+    config = YAML.load_file(@config_file)
 
     @task_files = config["tasks"]
 
@@ -51,7 +47,7 @@ class Boatman
 
   def self.run
     @task_files.each do |task_file|
-      require "#{@directory}/#{task_file}"
+      require "#{@working_directory}/#{task_file}"
       puts "Added task #{task_file}"
     end
 
@@ -66,7 +62,11 @@ class Boatman
 
       tasks.each do |task|
         if task[:last_run].nil? || Time.now - task[:last_run] > task[:time_interval]
-          task[:directory].instance_eval &task[:block]
+          # do everything in the context of the working directory
+          Dir.chdir(@working_directory) do
+            task[:directory].instance_eval &task[:block]
+          end
+
           task[:last_run] = Time.now
         end
       end

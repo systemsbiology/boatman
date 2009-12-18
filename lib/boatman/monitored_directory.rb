@@ -20,11 +20,7 @@ class MonitoredDirectory
     @minimum_age ||= false
     @maximum_age ||= false
 
-    if(@directory_path =~ /^\//)
-      file_pattern = File.expand_path(@directory_path + "/*" + file_ending)
-    else
-      file_pattern = File.expand_path(working_directory + "/" + @directory_path + "/*" + file_ending)
-    end
+    file_pattern = File.expand_path(@directory_path + "/*" + file_ending)
 
     file_names = Dir.glob(file_pattern)
     puts "Found #{file_names.size} files in #{file_pattern}" if $DEBUG
