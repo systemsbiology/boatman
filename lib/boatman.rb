@@ -52,6 +52,7 @@ class Boatman
   def self.run
     @task_files.each do |task_file|
       require "#{@directory}/#{task_file}"
+      puts "Added task #{task_file}"
     end
 
     interrupted = false
