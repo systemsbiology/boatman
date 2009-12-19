@@ -8,10 +8,8 @@ class MonitoredDirectory
       case key
       when :greater_than
         @minimum_age = value
-        puts "min age is #{value} seconds" if $DEBUG
       when :less_than
         @maximum_age = value
-        puts "max age is #{value} seconds" if $DEBUG
       end
     end
   end
@@ -23,10 +21,10 @@ class MonitoredDirectory
     file_pattern = File.expand_path(@directory_path + "/*" + file_ending)
 
     file_names = Dir.glob(file_pattern)
-    puts "Found #{file_names.size} files in #{file_pattern}" if $DEBUG
+    Boatman.logger.debug "Found #{file_names.size} files in #{file_pattern}"
     file_names.each do |file_name|
       age = Time.now - File.mtime(file_name)
-      puts "Age in seconds of #{file_name} is #{age}" if $DEBUG
+      Boatman.logger.debug "Age in seconds of #{file_name} is #{age}"
       next if @minimum_age && age < @minimum_age
       next if @maximum_age && age > @maximum_age
 

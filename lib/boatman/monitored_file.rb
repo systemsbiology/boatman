@@ -20,19 +20,25 @@ class MonitoredFile
 
       next if File.exists?(destination_path)
 
-      FileUtils.cp file.path, destination_path
-      
-      unless @checksum_verification_disabled
-        verify_checksum_matches(file.path, destination_path)
-      end
+      begin
+        FileUtils.cp file.path, destination_path
+        
+        unless @checksum_verification_disabled
+          verify_checksum_matches(file.path, destination_path)
+        end
 
-      if block_given?
-        yield destination_path, "#{destination_path}.tmp"
-        FileUtils.cp "#{destination_path}.tmp", destination_path
-        FileUtils.rm "#{destination_path}.tmp"
-      end
+        if block_given?
+          yield destination_path, "#{destination_path}.tmp"
+          FileUtils.cp "#{destination_path}.tmp", destination_path
+          FileUtils.rm "#{destination_path}.tmp"
+        end
 
-      FileUtils.rm file.path
+        FileUtils.rm file.path
+
+        Boatman.logger.info "Successfully moved #{file.path} to #{destination_path}"
+      rescue Exception => e
+        Boatman.logger.error e.message
+      end
     end
   end
 

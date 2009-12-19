@@ -1,4 +1,3 @@
-$DEBUG = true
 require "yaml"
 require "digest/md5"
 
@@ -11,6 +10,7 @@ require "boatman/monitored_file.rb"
 
 class Boatman 
   cattr_accessor :tasks
+  cattr_accessor :logger
 
   def self.load(args)
     if(args.size < 1 || args.size > 2)
@@ -18,16 +18,21 @@ class Boatman
       exit(0)
     end
 
+    puts "Logging to boatman.log"
+    require 'logger'
+    Boatman.logger = Logger.new("boatman.log")
+    logger.level = Logger::INFO
+
     @config_file = args[0]
 
     @working_directory = args[1] || "."
-    puts "working directory: #{@working_directory}" if $DEBUG
+    Boatman.logger.info "Working directory: #{@working_directory}"
 
     load_config_file(args[0])
   end
 
   def self.load_config_file(file)
-    puts "loading #{@config_file}" if $DEBUG
+    Boatman.logger.info  "Loading Config File: #{@config_file}"
     config = YAML.load_file(@config_file)
 
     @task_files = config["tasks"]
