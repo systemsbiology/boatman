@@ -18,17 +18,18 @@ class MonitoredDirectory
     @minimum_age ||= false
     @maximum_age ||= false
 
-    file_pattern = File.expand_path(@directory_path + "/*" + file_ending)
+    file_paths = Dir.entries(@directory_path).grep(/#{file_ending}$/).collect do |name|
+      "#{@directory_path}/#{name}"
+    end
 
-    file_names = Dir.glob(file_pattern)
-    Boatman.logger.debug "Found #{file_names.size} files in #{file_pattern}"
-    file_names.each do |file_name|
-      age = Time.now - File.mtime(file_name)
-      Boatman.logger.debug "Age in seconds of #{file_name} is #{age}"
+    Boatman.logger.debug "Found #{file_paths.size} files in #{@directory_path}"
+    file_paths.each do |file_path|
+      age = Time.now - File.mtime(file_path)
+      Boatman.logger.debug "Age in seconds of #{file_path} is #{age}"
       next if @minimum_age && age < @minimum_age
       next if @maximum_age && age > @maximum_age
 
-      file = MonitoredFile.new(file_name)
+      file = MonitoredFile.new(file_path)
       file.instance_eval &block
     end
   end
