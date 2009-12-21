@@ -25,11 +25,11 @@ class MonitoredDirectory
     Boatman.logger.debug "Found #{file_paths.size} files in #{@directory_path}"
     file_paths.each do |file_path|
       age = Time.now - File.mtime(file_path)
-      Boatman.logger.debug "Age in seconds of #{file_path} is #{age}"
       next if @minimum_age && age < @minimum_age
       next if @maximum_age && age > @maximum_age
 
-      file = MonitoredFile.new(file_path)
+      match_data = file_path.match(file_pattern) if file_pattern.is_a?(Regexp)
+      file = MonitoredFile.new(file_path, match_data)
       file.instance_eval &block
     end
   end

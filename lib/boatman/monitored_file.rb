@@ -1,15 +1,17 @@
 class MonitoredFile
   attr_accessor :path
+  attr_accessor :match_data
 
-  def initialize(file_path)
+  def initialize(file_path, match_data = nil)
     @path = file_path
+    @match_data = match_data
   end
 
   def disable_checksum_verification
     @checksum_verification_disabled = true
   end
 
-  def copy(params)
+  def copy(params, &block)
     source_path = params[:file].path
     base_name = params[:rename] || File.basename(source_path)
 
