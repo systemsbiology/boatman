@@ -68,6 +68,15 @@ describe "Moving new files from one location to another" do
     File.exist?(@working_directory + '/tmp/destination/renamed_datafile.txt').should be_true
   end
 
+  it "should move a file based on a regular expression on the entire filename" do
+    FileUtils.touch(@working_directory + '/tmp/source/datafile.txt')
+  
+    boatman = Boatman.load(["#{@working_directory}/filename_regexp.yml", @working_directory])
+    run_boatman
+
+    File.exist?(@working_directory + '/tmp/destination/datafile.txt').should be_true
+  end
+
   after(:each) do
     FileUtils.rm_rf(@working_directory + '/tmp')
   end

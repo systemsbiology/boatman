@@ -14,11 +14,11 @@ class MonitoredDirectory
     end
   end
 
-  def files_ending_with(file_ending, &block)
+  def files_matching(file_pattern, &block)
     @minimum_age ||= false
     @maximum_age ||= false
 
-    file_paths = Dir.entries(@directory_path).grep(/#{file_ending}$/).collect do |name|
+    file_paths = Dir.entries(@directory_path).grep(/#{file_pattern}/).collect do |name|
       "#{@directory_path}/#{name}"
     end
 
@@ -32,5 +32,9 @@ class MonitoredDirectory
       file = MonitoredFile.new(file_path)
       file.instance_eval &block
     end
+  end
+
+  def files_ending_with(file_ending, &block)
+    return files_matching(/#{file_ending}$/, &block)
   end
 end
