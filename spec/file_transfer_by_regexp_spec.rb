@@ -10,7 +10,7 @@ describe "Moving files based on regexp ending" do
     FileUtils.touch(@working_directory + '/tmp/source/datafile.tif')
   end
 
-  it "should copy only files with the correct ending" do
+  it "should move only files with the correct ending" do
     #$DEBUG = true
     boatman = Boatman.load(["#{@working_directory}/config.yml", @working_directory])
     thread = Thread.new do

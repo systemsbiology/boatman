@@ -1,5 +1,5 @@
 tasks:
-- file_transfer_by_regexp.rb
+- modify.rb
 directories:
   source_folder: tmp/source
   destination_folder: tmp/destination

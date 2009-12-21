@@ -1,0 +1,7 @@
+# Logfile created on Mon Dec 21 12:21:07 -0800 2009 by /
+I, [2009-12-21T12:21:07.212062 #18600]  INFO -- : Working directory: .
+I, [2009-12-21T12:21:07.212122 #18600]  INFO -- : Loading Config File: rename.yml
+I, [2009-12-21T12:21:07.216172 #18600]  INFO -- : Successfully moved tmp/source/me.txt to /net/arrays/Tools/Automator/boatman/spec/data/tmp/destination/renamed_me.txt
+I, [2009-12-21T12:23:00.699958 #18787]  INFO -- : Working directory: .
+I, [2009-12-21T12:23:00.700058 #18787]  INFO -- : Loading Config File: filename_ending.yml
+I, [2009-12-21T12:23:00.705031 #18787]  INFO -- : Successfully moved tmp/source/datafile.txt to /net/arrays/Tools/Automator/boatman/spec/data/tmp/destination/datafile.txt

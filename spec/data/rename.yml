@@ -1,5 +1,5 @@
 tasks:
-- file_transfer_and_rename.rb
+- rename.rb
 directories:
   source_folder: tmp/source
   destination_folder: tmp/destination
