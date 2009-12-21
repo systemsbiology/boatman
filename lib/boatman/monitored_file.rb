@@ -11,9 +11,9 @@ class MonitoredFile
 
   def copy(params)
     source_path = params[:file].path
-    base_name = File.basename(source_path)
+    base_name = params[:rename] || File.basename(source_path)
 
-    destination_path = File.expand_path(params[:to] + "/" + base_name) if File.directory?(params[:to])
+    destination_path = File.expand_path(params[:to] + "/" + base_name) 
 
     return if File.exists?(destination_path)
 
@@ -27,10 +27,10 @@ class MonitoredFile
 
   def move(params, &block)
     source_path = params[:file].path
-    base_name = File.basename(source_path)
+    base_name = params[:rename] || File.basename(source_path)
 
-    destination_path = File.expand_path(params[:to] + "/" + base_name) if File.directory?(params[:to])
-
+    destination_path = File.expand_path(params[:to] + "/" + base_name) 
+    
     return if File.exists?(destination_path)
 
     begin
@@ -46,6 +46,7 @@ class MonitoredFile
   private
 
   def copy_file(source_path, destination_path, &block)
+    FileUtils.mkdir_p File.dirname(destination_path)
     FileUtils.cp source_path, destination_path
     
     unless @checksum_verification_disabled

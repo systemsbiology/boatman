@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Moving new files from one location to another with modifications" do
 
   before do
-    #require 'rubygems';require 'ruby-debug';debugger
     @working_directory = File.expand_path(File.dirname(__FILE__) + '/data/file_transfer_and_modify')
     FileUtils.mkdir_p(@working_directory + '/tmp/source')
     FileUtils.mkdir_p(@working_directory + '/tmp/destination')

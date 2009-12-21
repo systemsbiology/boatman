@@ -1,0 +1,21 @@
+# Logfile created on Mon Dec 21 10:51:55 -0800 2009 by /
+I, [2009-12-21T10:51:55.810794 #9001]  INFO -- : Working directory: .
+I, [2009-12-21T10:51:55.810853 #9001]  INFO -- : Loading Config File: config.yml
+I, [2009-12-21T10:51:55.817890 #9001]  INFO -- : Successfully moved tmp/source/me.txt to /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/tmp/destination/tmp/source/renamed_me.txt
+I, [2009-12-21T10:54:49.555548 #9280]  INFO -- : Working directory: .
+I, [2009-12-21T10:54:49.555646 #9280]  INFO -- : Loading Config File: config.yml
+I, [2009-12-21T10:55:44.996914 #9280]  INFO -- : Successfully moved tmp/source/me.txt to /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/tmp/destination/tmp/source/renamed_me.txt
+I, [2009-12-21T10:56:42.869434 #9499]  INFO -- : Working directory: .
+I, [2009-12-21T10:56:42.869534 #9499]  INFO -- : Loading Config File: config.yml
+I, [2009-12-21T10:56:42.873920 #9499]  INFO -- : Successfully moved tmp/source/me.txt to /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/tmp/destination/renamed_me.txt
+I, [2009-12-21T11:02:30.079122 #10343]  INFO -- : Working directory: .
+I, [2009-12-21T11:02:30.079219 #10343]  INFO -- : Loading Config File: config.yml
+I, [2009-12-21T11:02:30.098819 #10343]  INFO -- : Successfully moved tmp/source/me.txt to /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/tmp/destination/renamed_me.txt
+I, [2009-12-21T11:26:32.025099 #12800]  INFO -- : Working directory: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_no_destination_folder
+I, [2009-12-21T11:26:32.025210 #12800]  INFO -- : Loading Config File: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_no_destination_folder/config.yml
+I, [2009-12-21T11:26:32.033715 #12800]  INFO -- : Working directory: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_and_modify
+I, [2009-12-21T11:26:32.033772 #12800]  INFO -- : Loading Config File: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_and_modify/config.yml
+I, [2009-12-21T11:26:55.103987 #12840]  INFO -- : Working directory: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_no_destination_folder
+I, [2009-12-21T11:26:55.104106 #12840]  INFO -- : Loading Config File: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_no_destination_folder/config.yml
+I, [2009-12-21T11:26:55.111705 #12840]  INFO -- : Working directory: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_and_modify
+I, [2009-12-21T11:26:55.111765 #12840]  INFO -- : Loading Config File: /net/arrays/Tools/Automator/boatman/spec/data/file_transfer_and_rename/spec/data/file_transfer_and_modify/config.yml
