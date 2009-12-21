@@ -9,36 +9,53 @@ class MonitoredFile
     @checksum_verification_disabled = true
   end
 
-  def move(params)
-    raise "move takes a hash of file => destination folder" unless params.instance_of?(Hash)
+  def copy(params)
+    source_path = params[:file].path
+    base_name = File.basename(source_path)
+
+    destination_path = File.expand_path(params[:to] + "/" + base_name) if File.directory?(params[:to])
+
+    return if File.exists?(destination_path)
+
+    begin
+      copy_file(source_path, destination_path, &block)
+      Boatman.logger.info "Successfully copied #{source_path} to #{destination_path}"
+    rescue Exception => e
+      Boatman.logger.error e.message
+    end
+  end
+
+  def move(params, &block)
+    source_path = params[:file].path
+    base_name = File.basename(source_path)
+
+    destination_path = File.expand_path(params[:to] + "/" + base_name) if File.directory?(params[:to])
+
+    return if File.exists?(destination_path)
+
+    begin
+      copy_file(source_path, destination_path, &block)
+      FileUtils.rm source_path
+
+      Boatman.logger.info "Successfully moved #{source_path} to #{destination_path}"
+    rescue Exception => e
+      Boatman.logger.error e.message
+    end
+  end
+
+  private
+
+  def copy_file(source_path, destination_path, &block)
+    FileUtils.cp source_path, destination_path
     
-    params.each do |file, destination|
-      source_path = file.path
-      base_name = File.basename(source_path)
+    unless @checksum_verification_disabled
+      verify_checksum_matches(source_path, destination_path, &block)
+    end
 
-      destination_path = File.expand_path(destination + "/" + base_name)
-
-      next if File.exists?(destination_path)
-
-      begin
-        FileUtils.cp file.path, destination_path
-        
-        unless @checksum_verification_disabled
-          verify_checksum_matches(file.path, destination_path)
-        end
-
-        if block_given?
-          yield destination_path, "#{destination_path}.tmp"
-          FileUtils.cp "#{destination_path}.tmp", destination_path
-          FileUtils.rm "#{destination_path}.tmp"
-        end
-
-        FileUtils.rm file.path
-
-        Boatman.logger.info "Successfully moved #{file.path} to #{destination_path}"
-      rescue Exception => e
-        Boatman.logger.error e.message
-      end
+    if block_given?
+      yield destination_path, "#{destination_path}.tmp"
+      FileUtils.cp "#{destination_path}.tmp", destination_path
+      FileUtils.rm "#{destination_path}.tmp"
     end
   end
 
