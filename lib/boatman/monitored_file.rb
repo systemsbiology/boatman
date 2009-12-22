@@ -18,7 +18,7 @@ class Boatman
 
     def copy_entry(source_path, destination_path, &block)
       FileUtils.mkdir_p File.dirname(destination_path)
-      FileUtils.cp_r source_path, destination_path
+      FileUtils.cp source_path, destination_path
       
       unless @checksum_verification_disabled
         verify_checksum_matches(source_path, destination_path, &block)
@@ -26,8 +26,8 @@ class Boatman
 
       if block_given?
         yield destination_path, "#{destination_path}.tmp"
-        FileUtils.cp_r "#{destination_path}.tmp", destination_path
-        FileUtils.rm_r "#{destination_path}.tmp"
+        FileUtils.cp "#{destination_path}.tmp", destination_path
+        FileUtils.rm "#{destination_path}.tmp"
       end
     end
 
