@@ -1,6 +1,154 @@
 = boatman
 
-Description goes here.
+Boatman is a simple Ruby DSL for polling directories and ferrying around / manipulating new files that appear in those folders. It was created as an attempt at something more elegant than having numerous scripts that all do very similar file transfer and manipulation tasks.
+
+== Install
+
+Install the boatman gem (assuming you have Ruby and RubyGems):
+
+  gem install boatman
+
+== Example
+
+Get a quick feel for what boatman does with this example.
+
+Create a YAML file to define the task scripts and directories they'll operate on. Let's call it demo.yml:
+
+  tasks:
+  - demo.rb
+  directories:
+    fresh_text_folder: txt_output
+    text_storage_folder: storage
+    
+Now create two folders under the folder where you have demo.yml called "txt_output" and "storage".
+
+Make a task file demo.rb:
+
+  fresh_text_folder.check_every 5.seconds do
+    age :greater_than => 1.second
+
+    files_ending_with "txt" do |file|
+      move file, :to => text_storage_folder
+    end
+  end
+
+Now run your task:
+
+  boatman demo.yml
+
+Now, while boatman is running, open another terminal or a file browser and create a file in the txt_output folder you created called "demo.txt". Wait a bit and it should get moved to the "storage" folder you made.
+
+Hit Ctrl-C to exit out of boatman. You can take a look at the boatman.log file it creates to see a log of what operations have been performed.
+
+== Creating tasks
+
+=== Polling folders
+
+The top level of a boatman task will usually be a directory polling loop. This is accomplished by running the check_every method on a directory specified in your YAML configuration file. The check_every method takes a time interval as its only argument other than a block. Using the example above, running
+
+  fresh_text_folder.check_every 5.seconds do
+    ...
+  end
+
+will run the provided do..end block every 5 seconds in the context of the fresh_text_folder directory.
+
+=== Specifying file/folder criteria
+
+It is often desirable to consider just a subset of the files in the folder being polled. Files/folders can be selected by age and file/folder name. Age can be specified inside the polling folders do..end block:
+
+  # age of the file must be greater than 1 minute
+  age :greater_than => 1.minute
+  
+  # age of the file must be less than 24 hours
+  age :less_than => 24.hours
+
+There are a few ways to select based on file name. Each of these methods accepts a block to run on each selected file/folder:
+
+  # select files by a string or regular expression
+  files_matching /\d+\.tif/ do |file|
+    ...
+  end
+  
+  # select files by a string or regular expression ending
+  files_ending_with "txt" do |file|
+    ...
+  end
+  
+  # select folders by a string or regular expression
+  folders_matching /\d+/ do |folder|
+    ...
+  end
+  
+  # select folders by a string or regular expression ending
+  folders_ending_with "log" do |folder|
+    ...
+  end
+
+=== Copying files/folders
+
+Files/folders can be copied or moved inside the block provided to the file/folder matching methods:
+
+  # move selected files to destination_folder, which needs to be defined in the configuration YAML file.
+  files_ending_with "txt" do |file|
+    move file, :to => destination_folder
+  end
+  
+  # same thing but copy the file instead of moving it
+  files_ending_with "txt" do |file|
+    copy file, :to => destination_folder
+  end
+
+boatman will perform a checksum verification by default in order to catch errors in file transfers. This can be disabled with the disable_checksum_verification directive inside the file/folder matching block:
+
+  files_ending_with "txt" do |file|
+    disable_checksum_verification
+    
+    move file, :to => destination_folder
+  end
+
+Files can optionally be renamed using the :rename parameter for move or copy:
+
+  files_ending_with "txt" do |file|
+    # use the path method on the file
+    new_name = "renamed_" + File.basename(file.path)
+    
+    # file will renamed, e.g. test.txt becomes renamed_test.txt
+    move file, :to => destination_folder, :rename => new_name
+  end
+
+The file being copied/moved can also be modified by passing a block to the copy or move methods. The parameters for the block are the path to read the original file and a the path to write the modified file:
+
+  files_ending_with "txt" do |file|
+    move file, :to => destination_folder do |old_file_name, new_file_name|
+      old_file = File.new(old_file_name, "r")
+      new_file = File.new(new_file_name, "w")
+      
+      old_file.readlines.each do |line|
+        new_file << "# #{line}"
+      end
+    end
+  end
+
+== Configuration Files
+
+YAML configuration files for boatman consist of two parts, tasks and directories.
+
+Under tasks you can specify any number of task files to be loaded and run together. Note that boatman will take care of running each task on the interval it specifies, however the tasks are run serially so a long-running task will prevent subsequent tasks from running until it completes:
+
+  # config.yml
+  tasks:
+  - text_file_reformatter.rb
+  - raw_data_transfer.rb
+  directories:
+  ...
+
+Directories allow you to name directories you'd like to have available to your tasks. It is possible to specify both Windows- and POSIX-style paths:
+
+  # Windows-style
+  my_shared_folder: //mycomputer/myshare
+  
+  # POSIX-style
+  my_shared_folder: /home/bmarzolf/share
 
 == Note on Patches/Pull Requests
  
