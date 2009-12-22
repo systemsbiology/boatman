@@ -4,7 +4,7 @@ class String
     Boatman.tasks << {
       :time_interval => time_interval,
       :block => block,
-      :directory => MonitoredDirectory.new(self)
+      :directory => Boatman::MonitoredDirectory.new(self)
     }
   end
 end

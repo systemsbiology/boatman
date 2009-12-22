@@ -77,6 +77,16 @@ describe "Moving new files from one location to another" do
     File.exist?(@working_directory + '/tmp/destination/datafile.txt').should be_true
   end
 
+  it "should move a folder based on its name" do
+    FileUtils.mkdir(@working_directory + '/tmp/source/bob')
+  
+    boatman = Boatman.load(["#{@working_directory}/folder.yml", @working_directory])
+    run_boatman
+
+    File.exist?(@working_directory + '/tmp/destination/bob').should be_true
+    File.directory?(@working_directory + '/tmp/destination/bob').should be_true
+  end
+
   after(:each) do
     FileUtils.rm_rf(@working_directory + '/tmp')
   end
