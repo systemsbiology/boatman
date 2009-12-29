@@ -38,7 +38,7 @@ class Boatman
         next if @minimum_age && age < @minimum_age
         next if @maximum_age && age > @maximum_age
 
-        match_data = entry_path.match(entry_pattern) if entry_pattern.is_a?(Regexp)
+        match_data = File.basename(entry_path).match(entry_pattern) if entry_pattern.is_a?(Regexp)
         case type
         when :file
           entry = MonitoredFile.new(entry_path, match_data)

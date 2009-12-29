@@ -6,8 +6,8 @@ require "boatman/ext/string"
 require "boatman/ext/fixnum"
 
 require "boatman/copyable"
-require "boatman/monitored_directory.rb"
-require "boatman/monitored_file.rb"
+require "boatman/monitored_directory"
+require "boatman/monitored_file"
 
 class Boatman 
   cattr_accessor :tasks
