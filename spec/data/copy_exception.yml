@@ -1,0 +1,5 @@
+tasks:
+- copy_exception.rb
+directories:
+  source_folder: tmp/source
+  destination_folder: tmp/destination

@@ -14,6 +14,8 @@ class Boatman
 
         Boatman.logger.info "Successfully copied #{source_path} to #{destination_path}"
       rescue Exception => e
+        # remove the possible incorrect destination file 
+        FileUtils.rm_r "#{destination_path}"
         Boatman.logger.error "#{e.message} at #{e.backtrace[0]}"
       end
     end

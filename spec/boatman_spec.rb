@@ -87,6 +87,15 @@ describe "Moving new files from one location to another" do
     File.directory?(@working_directory + '/tmp/destination/bob').should be_true
   end
 
+  it "should not produce a file at the destination if the block passed to 'copy' raises an exception" do
+    FileUtils.touch(@working_directory + '/tmp/source/datafile.txt')
+
+    boatman = Boatman.load(["#{@working_directory}/copy_exception.yml", @working_directory])
+    run_boatman
+
+    File.exist?(@working_directory + '/tmp/destination/datafile.txt').should be_false
+  end
+
   after(:each) do
     FileUtils.rm_rf(@working_directory + '/tmp')
   end
