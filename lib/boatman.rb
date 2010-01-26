@@ -68,9 +68,13 @@ class Boatman
 
       tasks.each do |task|
         if task[:last_run].nil? || Time.now - task[:last_run] > task[:time_interval]
-          # do everything in the context of the working directory
-          Dir.chdir(@working_directory) do
-            task[:directory].instance_eval &task[:block]
+          begin
+            # do everything in the context of the working directory
+            Dir.chdir(@working_directory) do
+              task[:directory].instance_eval &task[:block]
+            end
+          rescue Exception => e
+            Boatman.logger.error "Task had an error: #{e.message}"
           end
 
           task[:last_run] = Time.now

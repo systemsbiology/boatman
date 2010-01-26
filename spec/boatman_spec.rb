@@ -9,11 +9,11 @@ describe "Moving new files from one location to another" do
   end
 
   def run_boatman
-    thread = Thread.new do
+    @thread = Thread.new do
       Boatman.run
     end
     sleep 2
-    thread.exit
+    @thread.exit
   end
 
   it "should move based on filename ending" do
@@ -94,6 +94,16 @@ describe "Moving new files from one location to another" do
     run_boatman
 
     File.exist?(@working_directory + '/tmp/destination/datafile.txt').should be_false
+  end
+
+  it "should not raise and exception (and crash boatman) when a task raises and exception" do
+    FileUtils.touch(@working_directory + '/tmp/source/datafile.txt')
+
+    boatman = Boatman.load(["#{@working_directory}/invalid_directory.yml", @working_directory])
+    run_boatman
+
+    # nil status indicates an exception was thrown
+    @thread.status.should_not be_nil
   end
 
   after(:each) do

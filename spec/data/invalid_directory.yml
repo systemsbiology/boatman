@@ -1,0 +1,5 @@
+tasks:
+- invalid_directory.rb
+directories:
+  source_folder: tmp/nonexistent_source
+  destination_folder: tmp/destination
