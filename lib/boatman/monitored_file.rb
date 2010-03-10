@@ -32,9 +32,20 @@ class Boatman
     end
 
     def verify_checksum_matches(file_1, file_2)
-      file_1_digest = Digest::MD5.hexdigest( File.read(file_1) )
-      file_2_digest = Digest::MD5.hexdigest( File.read(file_2) )
+      file_1_digest = incremental_digest(file_1)
+      file_2_digest = incremental_digest(file_2)
       raise "Checksum verification failed when copying #{base_name}" unless  file_1_digest == file_2_digest
+    end
+
+    def incremental_digest(file_name)
+      file = File.open(file_name, "r")
+
+      digester = Digest::MD5.new
+      file.each_line do |line|
+        digester << line
+      end
+
+      return digester.hexdigest
     end
   end
 end
