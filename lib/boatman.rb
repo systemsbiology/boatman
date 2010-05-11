@@ -1,5 +1,6 @@
 require "yaml"
 require "digest/md5"
+require "fileutils"
 
 require "boatman/ext/class"
 require "boatman/ext/string"
@@ -70,11 +71,13 @@ class Boatman
         if task[:last_run].nil? || Time.now - task[:last_run] > task[:time_interval]
           begin
             # do everything in the context of the working directory
+            puts "Going to check #{task[:directory].path} at #{Time.now}" if $DEBUG
             Dir.chdir(@working_directory) do
               task[:directory].instance_eval &task[:block]
             end
+            puts "Leaving #{task[:directory].path} at #{Time.now}" if $DEBUG
           rescue Exception => e
-            Boatman.logger.error "Task had an error: #{e.message}"
+            Boatman.logger.error "Task had an error: #{e.message}" rescue nil
           end
 
           task[:last_run] = Time.now
