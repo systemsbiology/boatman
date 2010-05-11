@@ -18,16 +18,17 @@ class Boatman
 
     def copy_entry(source_path, destination_path, &block)
       FileUtils.mkdir_p File.dirname(destination_path)
-      FileUtils.cp source_path, destination_path
-      
-      unless @checksum_verification_disabled
-        verify_checksum_matches(source_path, destination_path, &block)
-      end
 
       if block_given?
-        yield destination_path, "#{destination_path}.tmp"
+        yield source_path, "#{destination_path}.tmp"
         FileUtils.cp "#{destination_path}.tmp", destination_path
         FileUtils.rm "#{destination_path}.tmp"
+      else
+        FileUtils.cp source_path, destination_path
+        
+        unless @checksum_verification_disabled
+          verify_checksum_matches(source_path, destination_path, &block)
+        end
       end
     end
 
@@ -44,6 +45,8 @@ class Boatman
       file.each_line do |line|
         digester << line
       end
+
+      file.close
 
       return digester.hexdigest
     end
