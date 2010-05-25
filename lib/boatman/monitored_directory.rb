@@ -31,14 +31,14 @@ class Boatman
 
       Boatman.logger.debug "Found #{entry_paths.size} entries in #{@path}"
       entry_paths.each do |entry_path|
-        next if type == :file && !File.file?(entry_path)
-        next if type == :directory && !File.directory?(entry_path)
+        next if type == :file && !FTPUtils::FTPFile.file?(entry_path)
+        next if type == :directory && !FTPUtils::FTPFile.directory?(entry_path)
 
-        age = Time.now - File.mtime(entry_path)
+        age = Time.now - FTPUtils::FTPFile.mtime(entry_path)
         next if @minimum_age && age < @minimum_age
         next if @maximum_age && age > @maximum_age
 
-        match_data = File.basename(entry_path).match(entry_pattern) if entry_pattern.is_a?(Regexp)
+        match_data = FTPUtils::FTPFile.basename(entry_path).match(entry_pattern) if entry_pattern.is_a?(Regexp)
         case type
         when :file
           entry = MonitoredFile.new(entry_path, match_data)
@@ -69,13 +69,13 @@ class Boatman
     private
 
     def copy_entry(source_path, destination_path, &block)
-      FileUtils.mkdir_p File.dirname(destination_path)
-      FileUtils.cp_r source_path, destination_path
+      FTPUtils.mkdir_p FTPUtils::FTPFile.dirname(destination_path)
+      FTPUtils.cp_r source_path, destination_path
       
       if block_given?
         yield destination_path, "#{destination_path}.tmp"
-        FileUtils.cp_r "#{destination_path}.tmp", destination_path
-        FileUtils.rm_r "#{destination_path}.tmp"
+        FTPUtils.cp_r "#{destination_path}.tmp", destination_path
+        FTPUtils.rm_r "#{destination_path}.tmp"
       end
     end
 

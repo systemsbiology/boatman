@@ -17,14 +17,14 @@ class Boatman
     private
 
     def copy_entry(source_path, destination_path, &block)
-      FileUtils.mkdir_p File.dirname(destination_path)
+      FTPUtils.mkdir_p FTPUtils::FTPFile.dirname(destination_path)
 
       if block_given?
         yield source_path, "#{destination_path}.tmp"
-        FileUtils.cp "#{destination_path}.tmp", destination_path
-        FileUtils.rm "#{destination_path}.tmp"
+        FTPUtils.cp "#{destination_path}.tmp", destination_path
+        FTPUtils.rm "#{destination_path}.tmp"
       else
-        FileUtils.cp source_path, destination_path
+        FTPUtils.cp source_path, destination_path
         
         unless @checksum_verification_disabled
           verify_checksum_matches(source_path, destination_path, &block)
@@ -39,7 +39,7 @@ class Boatman
     end
 
     def incremental_digest(file_name)
-      file = File.open(file_name, "r")
+      file = open(file_name, "r")
 
       digester = Digest::MD5.new
       file.each_line do |line|

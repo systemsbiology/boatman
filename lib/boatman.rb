@@ -1,6 +1,12 @@
+begin
+  require "ftputils"
+rescue LoadError
+  require "rubygems"
+  require "ftputils"
+end
+
 require "yaml"
 require "digest/md5"
-require "fileutils"
 
 require "boatman/ext/class"
 require "boatman/ext/string"
