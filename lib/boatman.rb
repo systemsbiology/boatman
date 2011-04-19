@@ -83,7 +83,11 @@ class Boatman
             end
             puts "Leaving #{task[:directory].path} at #{Time.now}" if $DEBUG
           rescue Exception => e
-            Boatman.logger.error "Task had an error: #{e.message}" rescue nil
+            Boatman.logger.error "Task monitoring #{task[:directory].path} had an error: #{e.message}" rescue nil
+            Boatman.logger.error "Backtrace: #{e.backtrace.join("\n")}" if $DEBUG
+
+            # clear the FTP connection cache for good luck
+            FTPUtils::FTPConnection.clear_connection_cache
           end
 
           task[:last_run] = Time.now
