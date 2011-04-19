@@ -25,7 +25,7 @@ class Boatman
       @minimum_age ||= false
       @maximum_age ||= false
 
-      entry_paths = Dir.entries(@path).grep(/#{entry_pattern}/).collect do |name|
+      entry_paths = FTPUtils.ls(@path).grep(/#{entry_pattern}/).collect do |name|
         "#{@path}/#{name}"
       end
 
@@ -70,12 +70,13 @@ class Boatman
 
     def copy_entry(source_path, destination_path, &block)
       FTPUtils.mkdir_p FTPUtils::FTPFile.dirname(destination_path)
-      FTPUtils.cp_r source_path, destination_path
       
       if block_given?
-        yield destination_path, "#{destination_path}.tmp"
+        yield source_path, "#{destination_path}.tmp"
         FTPUtils.cp_r "#{destination_path}.tmp", destination_path
         FTPUtils.rm_r "#{destination_path}.tmp"
+      else
+        FTPUtils.cp_r source_path, destination_path
       end
     end
 

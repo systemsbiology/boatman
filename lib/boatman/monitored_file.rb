@@ -27,7 +27,7 @@ class Boatman
         FTPUtils.cp source_path, destination_path
         
         unless @checksum_verification_disabled
-          verify_checksum_matches(source_path, destination_path, &block)
+          verify_checksum_matches(source_path, destination_path)
         end
       end
     end
